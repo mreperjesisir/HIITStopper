@@ -11,16 +11,22 @@ import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+// TODO 1: Implement a rest time timer
+// TODO 2: Modify timer to add sets
+// TODO 3: Replace vertical seekbars with circular seekbars
+// TODO 4: Add TextViews to circular seekbars
+// TODO 5: Add indication of progress on Timer view for user to know how many sets are left
+
 public class MainActivity extends AppCompatActivity {
 
     private SeekBar mSetTime;
     private SeekBar mSetRest;
     private Button mStartTimerButton;
+    private Button mPauseTimerButton;
+    private Button mCancelTimerButton;
     private NumberPicker mSetPicker;
     private TextView mTimerText;
 
-    private boolean mIsPaused;
-    private boolean mIsTimerRunning;
     private CountDownTimer mActiveTimer;
     private long mMillisUntilFinished;
 
@@ -30,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mSetTime = (SeekBar) findViewById(R.id.seekbar_set);
         mSetRest = (SeekBar) findViewById(R.id.seekbar_rest);
         mStartTimerButton = (Button) findViewById(R.id.button_start);
+        mPauseTimerButton = (Button) findViewById(R.id.button_pause);
+        mCancelTimerButton = (Button) findViewById(R.id.button_cancel);
         mSetPicker = (NumberPicker) findViewById(R.id.set_picker);
         mTimerText = (TextView) findViewById(R.id.tv_timer);
 
@@ -49,30 +58,27 @@ public class MainActivity extends AppCompatActivity {
         mStartTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("MainActivity", "The Start button was pressed");
                 startTimer();
+            }
+        });
+        mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pauseTimer();
+            }
+        });
+        mCancelTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActiveTimer.cancel();
+                setStartingView();
             }
         });
     }
 
     private void startTimer(){
 
-        if (mIsTimerRunning){
-            return;
-        }
-        mIsPaused = false;
-        mIsTimerRunning = true;
-        mSetRest.setVisibility(View.INVISIBLE);
-        mSetTime.setVisibility(View.INVISIBLE);
-        mSetPicker.setVisibility(View.INVISIBLE);
-        mTimerText.setVisibility(View.VISIBLE);
-        mStartTimerButton.setText("Pause");
-        mStartTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pauseTimer();
-            }
-        });
+        setTimerView();
 
         mActiveTimer = new CountDownTimer(mSetTime.getProgress() * 1000, 1000) {
             @Override
@@ -82,26 +88,24 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onFinish() {
-                mSetRest.setVisibility(View.VISIBLE);
-                mSetTime.setVisibility(View.VISIBLE);
-                mSetPicker.setVisibility(View.VISIBLE);
-                mTimerText.setVisibility(View.INVISIBLE);
-                mStartTimerButton.setText("Start");
-                mIsTimerRunning = false;
+                setStartingView();
             }
         }.start();
     }
 
-    //TODO: Rewrite startTimer() and pauseTimer() so that the user can pause multiple times
-
     private void pauseTimer(){
-        mIsPaused = true;
         mActiveTimer.cancel();
-        mStartTimerButton.setText("Resume");
-        mStartTimerButton.setOnClickListener(new View.OnClickListener() {
+        mPauseTimerButton.setText("Resume");
+        mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mStartTimerButton.setText("Pause");
+                mPauseTimerButton.setText("Pause");
+                mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pauseTimer();
+                    }
+                });
                 mActiveTimer = new CountDownTimer(mMillisUntilFinished, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -111,12 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        mSetRest.setVisibility(View.VISIBLE);
-                        mSetTime.setVisibility(View.VISIBLE);
-                        mSetPicker.setVisibility(View.VISIBLE);
-                        mTimerText.setVisibility(View.INVISIBLE);
-                        mStartTimerButton.setText("Start");
-                        mIsTimerRunning = false;
+                        setStartingView();
                     }
                 }.start();
             }
@@ -124,10 +123,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setTimerView() {
+        mStartTimerButton.setVisibility(View.INVISIBLE);
+        mSetRest.setVisibility(View.INVISIBLE);
+        mSetTime.setVisibility(View.INVISIBLE);
+        mSetPicker.setVisibility(View.INVISIBLE);
+        mPauseTimerButton.setVisibility(View.VISIBLE);
+        mCancelTimerButton.setVisibility(View.VISIBLE);
+        mTimerText.setVisibility(View.VISIBLE);
+    }
+
+    private void setStartingView() {
+        mSetRest.setVisibility(View.VISIBLE);
+        mSetTime.setVisibility(View.VISIBLE);
+        mSetPicker.setVisibility(View.VISIBLE);
+        mStartTimerButton.setVisibility(View.VISIBLE);
+        mTimerText.setVisibility(View.INVISIBLE);
+        mCancelTimerButton.setVisibility(View.INVISIBLE);
+        mPauseTimerButton.setVisibility(View.INVISIBLE);
+    }
+
     private void setCurrentTime(long millisUntilFinished) {
         int minutes = (int) millisUntilFinished / 1000 / 60;
         int seconds = (int) millisUntilFinished /1000 % 60;
-        mTimerText.setText(minutes + ":" + seconds);
+
+        String secondsWithZero = String.valueOf(seconds);
+        if (seconds<10){
+            secondsWithZero = "0" + seconds;
+        }
+
+        String formattedTime = minutes + ":" + secondsWithZero;
+        mTimerText.setText(formattedTime);
     }
+
+
+
+
 
 }
