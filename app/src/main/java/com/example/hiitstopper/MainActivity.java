@@ -19,8 +19,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SeekBar mSetTime;
-    private SeekBar mSetRest;
+    private int mNumberOfSets;
+
+    private SeekBar mSetsSeekBar;
+    private SeekBar mRestSeekBar;
     private Button mStartTimerButton;
     private Button mPauseTimerButton;
     private Button mCancelTimerButton;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTimerText;
 
     private CountDownTimer mActiveTimer;
-    private long mMillisUntilFinished;
+    private long mMillisUntilExerciseFinished;
+    private long mMillisUntilRestFinished;
 
 
     @Override
@@ -37,63 +40,77 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        mSetTime = (SeekBar) findViewById(R.id.seekbar_set);
-        mSetRest = (SeekBar) findViewById(R.id.seekbar_rest);
+        mSetsSeekBar = (SeekBar) findViewById(R.id.seekbar_set);
+        mRestSeekBar = (SeekBar) findViewById(R.id.seekbar_rest);
         mStartTimerButton = (Button) findViewById(R.id.button_start);
         mPauseTimerButton = (Button) findViewById(R.id.button_pause);
         mCancelTimerButton = (Button) findViewById(R.id.button_cancel);
         mSetPicker = (NumberPicker) findViewById(R.id.set_picker);
         mTimerText = (TextView) findViewById(R.id.tv_timer);
 
-        mSetTime.setMax(180);
-        mSetRest.setMax(90);
+        mSetsSeekBar.setMax(180);
+        mRestSeekBar.setMax(90);
 
-        String[] numbers = new String[] {"12", "11", "10", "9","8", "7", "6", "5", "4", "3", "2", "1"};
-        mSetPicker.setDisplayedValues(numbers);
+        mSetPicker.setDisplayedValues(getResources().getStringArray(R.array.sets));
         mSetPicker.setMinValue(1);
-        mSetPicker.setMaxValue(numbers.length);
+        mSetPicker.setMaxValue(getResources().getStringArray(R.array.sets).length);
         mSetPicker.setWrapSelectorWheel(false);
-        mSetPicker.setValue(10);
+        mSetPicker.setValue(3);
 
         mStartTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimer();
+                mNumberOfSets = mSetPicker.getValue();
+                Log.i("MainActivity", "The setsSeekbar progress value is " + mSetsSeekBar.getProgress());
+                startExerciseTimer(mSetsSeekBar.getProgress()*1000);
             }
         });
         mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pauseTimer();
+                pauseExerciseTimer();
             }
         });
         mCancelTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mActiveTimer.cancel();
-                setStartingView();
+                setSetupView();
             }
         });
     }
 
-    private void startTimer(){
+
+    // TODO: There is a problem here. The timer often skips a second when it starts.
+    //  Lower the interval to 100 milliseconds and round it. This is as close you can get
+    //  to showing accurate seconds. Check stackoverflow for implementation examples
+
+    private void startExerciseTimer(int exerciseTimeInMilliseconds){
 
         setTimerView();
+        setCurrentTime(exerciseTimeInMilliseconds);
+            mActiveTimer = new CountDownTimer(exerciseTimeInMilliseconds, 100) {
+                @Override
+                public void onTick(long millisUntilFinished) {
 
-        mActiveTimer = new CountDownTimer(mSetTime.getProgress() * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                mMillisUntilFinished = millisUntilFinished;
-                setCurrentTime(mMillisUntilFinished);
-            }
-            @Override
-            public void onFinish() {
-                setStartingView();
-            }
-        }.start();
+                    mMillisUntilExerciseFinished = millisUntilFinished;
+                    setCurrentTime(mMillisUntilExerciseFinished);
+                }
+
+                @Override
+                public void onFinish() {
+                    mNumberOfSets --;
+                    if (mNumberOfSets>0){
+                        startRestTimer(mRestSeekBar.getProgress()*1000);
+                    } else {
+                        setSetupView();
+                    }
+
+                }
+            }.start();
     }
 
-    private void pauseTimer(){
+    private void pauseExerciseTimer(){
         mActiveTimer.cancel();
         mPauseTimerButton.setText("Resume");
         mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
@@ -103,39 +120,57 @@ public class MainActivity extends AppCompatActivity {
                 mPauseTimerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pauseTimer();
+                        pauseExerciseTimer();
                     }
                 });
-                mActiveTimer = new CountDownTimer(mMillisUntilFinished, 1000) {
+                mActiveTimer = new CountDownTimer(mMillisUntilExerciseFinished, 100) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        mMillisUntilFinished = millisUntilFinished;
-                        setCurrentTime(mMillisUntilFinished);
+                        mMillisUntilExerciseFinished = millisUntilFinished;
+                        setCurrentTime(mMillisUntilExerciseFinished);
                     }
 
                     @Override
                     public void onFinish() {
-                        setStartingView();
+                        setSetupView();
                     }
                 }.start();
             }
         });
+    }
 
+    private void startRestTimer(int restTimeInMilliseconds){
+
+        setTimerView();
+        setCurrentTime(restTimeInMilliseconds);
+
+        new CountDownTimer(restTimeInMilliseconds, 100) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mMillisUntilRestFinished = millisUntilFinished;
+                setCurrentTime(mMillisUntilRestFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                startExerciseTimer(mSetsSeekBar.getProgress()*1000);
+            }
+        }.start();
     }
 
     private void setTimerView() {
         mStartTimerButton.setVisibility(View.INVISIBLE);
-        mSetRest.setVisibility(View.INVISIBLE);
-        mSetTime.setVisibility(View.INVISIBLE);
+        mRestSeekBar.setVisibility(View.INVISIBLE);
+        mSetsSeekBar.setVisibility(View.INVISIBLE);
         mSetPicker.setVisibility(View.INVISIBLE);
         mPauseTimerButton.setVisibility(View.VISIBLE);
         mCancelTimerButton.setVisibility(View.VISIBLE);
         mTimerText.setVisibility(View.VISIBLE);
     }
 
-    private void setStartingView() {
-        mSetRest.setVisibility(View.VISIBLE);
-        mSetTime.setVisibility(View.VISIBLE);
+    private void setSetupView() {
+        mRestSeekBar.setVisibility(View.VISIBLE);
+        mSetsSeekBar.setVisibility(View.VISIBLE);
         mSetPicker.setVisibility(View.VISIBLE);
         mStartTimerButton.setVisibility(View.VISIBLE);
         mTimerText.setVisibility(View.INVISIBLE);
@@ -155,9 +190,4 @@ public class MainActivity extends AppCompatActivity {
         String formattedTime = minutes + ":" + secondsWithZero;
         mTimerText.setText(formattedTime);
     }
-
-
-
-
-
 }
