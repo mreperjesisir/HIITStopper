@@ -11,110 +11,159 @@
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00"
+        android:text="00:00\u00A0"
+        android:fontFamily="@font/hemi_head_bd_it"
         android:textSize="60sp"
-        app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_start"
+        android:layout_marginBottom="32dp"
         android:visibility="invisible"/>
 
-    <FrameLayout
-        android:id="@+id/frameLayout1"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:padding="20dp"
-        app:layout_constraintEnd_toStartOf="@id/frameLayout2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <SeekBar
-            android:id="@+id/seekbar_set"
-            android:layout_width="400dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:progressDrawable="@drawable/bg_custom_seekbar_set"
-            android:rotation="270"
-            android:thumb="@drawable/ic_thumb"
-            tools:layout_editor_absoluteX="71dp"
-            tools:layout_editor_absoluteY="8dp" />
-    </FrameLayout>
-
-
-
-    <FrameLayout
-        android:id="@+id/frameLayout2"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:padding="20dp"
-        app:layout_constraintEnd_toStartOf="@id/frameLayout3"
-        app:layout_constraintStart_toEndOf="@+id/frameLayout1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <NumberPicker
-            android:id="@+id/set_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/frameLayout3"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:padding="20dp"
+    <me.tankery.lib.circularseekbar.CircularSeekBar
+        android:id="@+id/seekbar_set"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        app:cs_circle_stroke_width="18dp"
+        app:cs_end_angle="40"
+        app:cs_pointer_stroke_width="32dp"
+        app:cs_start_angle="140"
+        app:layout_constraintBottom_toTopOf="@id/set_picker"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/frameLayout2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <SeekBar
-            android:id="@+id/seekbar_rest"
-            android:layout_width="400dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:progressDrawable="@drawable/bg_custom_seekbar_rest"
-            android:rotation="270"
-            android:thumb="@drawable/ic_thumb" />
-    </FrameLayout>
+    <TextView
+        android:id="@+id/label_exercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="Exercise\u00A0"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekbar_set"
+        app:layout_constraintEnd_toEndOf="@+id/seekbar_set"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_set"
+        app:layout_constraintTop_toTopOf="@+id/seekbar_set" />
 
-    <Button
+    <TextView
+        android:id="@+id/tv_exercise_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="0:00\u00A0"
+        android:textSize="38sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekbar_set"
+        app:layout_constraintEnd_toEndOf="@+id/seekbar_set"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_set"
+        app:layout_constraintTop_toTopOf="@+id/seekbar_set"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/label_sets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="Sets"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/seekbar_rest"
+        app:layout_constraintEnd_toStartOf="@+id/set_picker"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekbar_set" />
+
+    <NumberPicker
+        android:id="@+id/set_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:theme="@style/NumberPickerCustomText"
+        app:layout_constraintBottom_toTopOf="@+id/seekbar_rest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/label_sets"
+        app:layout_constraintTop_toBottomOf="@+id/seekbar_set" />
+
+    <me.tankery.lib.circularseekbar.CircularSeekBar
+        android:id="@+id/seekbar_rest"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        app:cs_pointer_stroke_width = "32dp"
+        app:cs_start_angle="140"
+        app:cs_end_angle="40"
+        android:thumb="@drawable/ic_thumb"
+        app:layout_constraintBottom_toTopOf="@+id/button_start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/set_picker"
+        app:cs_circle_stroke_width = "18dp"/>
+
+
+    <TextView
+        android:id="@+id/label_rest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="Rest\u00A0"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekbar_rest"
+        app:layout_constraintEnd_toEndOf="@+id/seekbar_rest"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_rest"
+        app:layout_constraintTop_toTopOf="@+id/seekbar_rest" />
+
+    <TextView
+        android:id="@+id/tv_rest_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:padding="4dp"
+        android:text="0:00\u00A0"
+        android:textSize="38sp"
+        app:layout_constraintBottom_toBottomOf="@+id/seekbar_rest"
+        app:layout_constraintEnd_toEndOf="@+id/seekbar_rest"
+        app:layout_constraintStart_toStartOf="@+id/seekbar_rest"
+        app:layout_constraintTop_toTopOf="@+id/seekbar_rest"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_start"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="72dp"
         android:text="Start"
         android:textSize="24sp"
-        android:layout_marginBottom="30dp"
+        app:cornerRadius="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_rest" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_pause"
-        android:visibility="invisible"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="72dp"
         android:text="Pause"
         android:textSize="18sp"
-        android:layout_marginBottom="30dp"
+        android:visibility="invisible"
+        app:cornerRadius="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_start" />
+        app:layout_constraintStart_toEndOf="@id/button_cancel"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_rest" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_cancel"
-        android:visibility="invisible"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="72dp"
         android:text="Cancel"
         android:textSize="18sp"
-        android:layout_marginBottom="30dp"
+        android:visibility="invisible"
+        app:cornerRadius="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_start"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/button_pause"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_rest" />
 
 
 

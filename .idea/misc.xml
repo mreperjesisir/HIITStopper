@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_custom_seekbar.xml" value="0.144" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_custom_seekbar_rest.xml" value="0.1315" />
+        <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_custom_seekbar_set.xml" value="0.1315" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_progress_color.xml" value="0.144" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_progress_color_rest.xml" value="0.1315" />
+        <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/bg_progress_color_set.xml" value="0.1315" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/drawable/ic_thumb.xml" value="0.144" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Android Studio Projects/HIITStopper/app/src/main/res/layout/list_item.xml" value="0.24895833333333334" />

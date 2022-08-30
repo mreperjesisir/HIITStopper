@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NumberPickerCustomText">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/hemi_head_bd_it</item>
+    </style>
+</resources>
