@@ -8,8 +8,8 @@
     android:paddingBottom="12dp"
     tools:context=".TimerActivity">
 
-    <!--All invisible views should become visible using animations
-    when the activity starts-->
+    <!--Pause button and Resume button should
+    have animations when pressed-->
 
     <me.tankery.lib.circularseekbar.CircularSeekBar
         android:id="@+id/seekbar_countdown"
@@ -22,6 +22,18 @@
         app:layout_constraintTop_toTopOf="@+id/tv_timer"/>
 
     <TextView
+        android:id="@+id/tv_sets_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="Sets Left: 2\u00A0"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/seekbar_countdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +44,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_heart_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/hemi_head_bd_it"
+        android:text="130 BPM\u00A0"
+        android:textSize="54sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button_pause"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekbar_countdown"
+        app:layout_constraintVertical_bias="0.45">
+
+    </TextView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_pause"

@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -15,6 +13,10 @@ import com.google.android.material.button.MaterialButton;
 import me.tankery.lib.circularseekbar.CircularSeekBar;
 
 public class MainActivity extends AppCompatActivity {
+
+    //TODO 1: add a style, theme, and background picture
+    //TODO 2: Add a Bluetooth connection feature for heartrate monitors
+    //TODO 3: Wire up the Heartrate Textview
 
     public static final String NUMBER_OF_SETS = "sets";
     public static final String EXERCISE_IN_MS = "exercise";
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Float f = v * 1000;
                 //add long values of float v
-                mExerciseTextView.setText(getFormattedCountDownTime(f.longValue()));
+                mExerciseTextView.setText(TimerUtilities.getFormattedTime(f.longValue()));
             }
 
             @Override
@@ -70,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
         mRestSeekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
             @Override
             public void onProgressChanged(CircularSeekBar circularSeekBar, float v, boolean b) {
                 Float f = v * 1000;
                 //add long values of float v
-                mRestTime.setText(getFormattedCountDownTime(f.longValue()));
+                mRestTime.setText(TimerUtilities.getFormattedTime(f.longValue()));
 
             }
 
@@ -105,22 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        // Bug fixed: pressing the cancel button while paused then pressing start
-        // won't cause two timers to run
-
     }
 
-    public static String getFormattedCountDownTime(long millisUntilFinished) {
-        int minutes = (int) millisUntilFinished / 1000 / 60;
-        int seconds = (int) millisUntilFinished / 1000 % 60;
-
-        String secondsWithZero = String.valueOf(seconds);
-        if (seconds<10){
-            secondsWithZero = "0" + seconds;
-        }
-
-        String formattedTime = minutes + ":" + secondsWithZero + "\u00A0";
-        return formattedTime;
-    }
 }
