@@ -18,7 +18,7 @@ public class TimerActivity extends AppCompatActivity {
 
     //TODO:
 
-    // These are intent extras
+    // These are the intent extras
     private int mNumberOfSets;
     private int mRestTimeInMs;
     private int mExerciseTimeInMs;
@@ -40,6 +40,8 @@ public class TimerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
+        // Sets up views
+
         mPauseTimerButton = findViewById(R.id.button_pause);
         mResumeTimerButton = findViewById(R.id.button_resume);
         mCancelTimerButton = findViewById(R.id.button_cancel);
@@ -47,12 +49,15 @@ public class TimerActivity extends AppCompatActivity {
         mCountdownTimer = findViewById(R.id.seekbar_countdown);
         mSetsLeft = findViewById(R.id.tv_sets_left);
         mHeartRate = findViewById(R.id.tv_heart_rate);
-
         mCountdownTimer.setClickable(false);
+
+        // Gets intent extras
+
         mExerciseTimeInMs = getIntent().getIntExtra(MainActivity.EXERCISE_IN_MS, 0);
         mRestTimeInMs = getIntent().getIntExtra(MainActivity.REST_IN_MS, 0);
         mNumberOfSets = getIntent().getIntExtra(MainActivity.NUMBER_OF_SETS,0);
 
+        // Sets up listeners for buttons
 
         mCancelTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +113,17 @@ public class TimerActivity extends AppCompatActivity {
                 }.start();
             }
         });
+
+        // Starts the timer
+
         startExerciseTimer(mExerciseTimeInMs);
     }
 
+    /**
+     * Creates a countdown timer for the
+     * exercise interval.
+     * @param exerciseTimeInMilliseconds - The exercise time in Ms
+     */
     private void startExerciseTimer(int exerciseTimeInMilliseconds){
         mIsItRest = false;
         setRemainingSetsTv();
@@ -153,6 +166,12 @@ public class TimerActivity extends AppCompatActivity {
         }.start();
     }
 
+
+    /**
+     * This method creates a countdown timer for
+     * the rest intervals.
+     * @param restTimeInMs - The rest time in Ms
+     */
     private void startRestTimer(int restTimeInMs){
         mIsItRest = true;
         mActiveTimer.cancel();
@@ -184,6 +203,10 @@ public class TimerActivity extends AppCompatActivity {
             }
         }.start();
     }
+
+    /**
+     * Shows the correct number of remaining sets in the UI
+     */
 
     private void setRemainingSetsTv(){
         int remainingSets = mNumberOfSets-1;

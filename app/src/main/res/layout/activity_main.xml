@@ -15,7 +15,7 @@
         app:cs_end_angle="180"
         app:cs_pointer_stroke_width="32dp"
         app:cs_start_angle="270"
-        app:layout_constraintBottom_toTopOf="@id/set_picker"
+        app:layout_constraintBottom_toTopOf="@id/middle_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,32 +49,48 @@
         app:layout_constraintTop_toTopOf="@+id/seekbar_set"
         app:layout_constraintVertical_bias="0.201" />
 
-    <TextView
-        android:id="@+id/label_sets"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:fontFamily="@font/hemi_head_bd_it"
-        android:text="Sets"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/seekbar_rest"
-        app:layout_constraintEnd_toStartOf="@+id/set_picker"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        android:id="@+id/middle_buttons"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_set"
+        app:layout_constraintBottom_toTopOf="@id/seekbar_rest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekbar_set" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <NumberPicker
-        android:id="@+id/set_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="10dp"
-        android:theme="@style/NumberPickerCustomText"
-        app:layout_constraintBottom_toTopOf="@+id/seekbar_rest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/label_sets"
-        app:layout_constraintTop_toBottomOf="@+id/seekbar_set" />
+        <TextView
+            android:id="@+id/label_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/hemi_head_bd_it"
+            android:text="Sets"
+            android:textSize="24sp"
+            android:layout_gravity="center_vertical" />
+
+        <NumberPicker
+            android:id="@+id/set_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="60dp"
+            android:theme="@style/NumberPickerCustomText"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar_rest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/label_sets"
+            app:layout_constraintTop_toBottomOf="@+id/seekbar_set"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch_bluetooth"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+
 
     <me.tankery.lib.circularseekbar.CircularSeekBar
         android:id="@+id/seekbar_rest"
@@ -87,7 +103,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/set_picker"
+        app:layout_constraintTop_toBottomOf="@id/middle_buttons"
         app:cs_circle_stroke_width = "18dp"/>
 
 

@@ -2,30 +2,45 @@ package com.example.hiitstopper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import me.tankery.lib.circularseekbar.CircularSeekBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     //TODO 1: add a style, theme, and background picture
     //TODO 2: Add a Bluetooth connection feature for heartrate monitors
     //TODO 3: Wire up the Heartrate Textview
 
+
+    private static final int ENABLE_BLUETOOTH_REQUEST_CODE = 1;
+
     public static final String NUMBER_OF_SETS = "sets";
     public static final String EXERCISE_IN_MS = "exercise";
     public static final String REST_IN_MS = "rest";
+
+    private BluetoothManager mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+    private BluetoothAdapter mBluetoothAdapter = mBluetoothManager.getAdapter();
+
 
     private CircularSeekBar mExerciseTimeSeekBar;
     private CircularSeekBar mRestSeekBar;
     private MaterialButton mStartTimerButton;
     private NumberPicker mSetPicker;
+    private SwitchMaterial mSwitch;
     private TextView mLabelExercise;
     private TextView mLabelRest;
     private TextView mLabelSets;
@@ -37,15 +52,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mExerciseTimeSeekBar = (CircularSeekBar) findViewById(R.id.seekbar_set);
-        mRestSeekBar = (CircularSeekBar) findViewById(R.id.seekbar_rest);
-        mStartTimerButton = (MaterialButton) findViewById(R.id.button_start);
-        mSetPicker = (NumberPicker) findViewById(R.id.set_picker);
-        mLabelExercise = (TextView) findViewById(R.id.label_exercise);
-        mLabelRest = (TextView) findViewById(R.id.label_rest);
-        mLabelSets = (TextView) findViewById(R.id.label_sets);
-        mExerciseTextView = (TextView) findViewById(R.id.tv_exercise_time);
-        mRestTime = (TextView) findViewById(R.id.tv_rest_time);
+        // Sets up the views
+
+        mExerciseTimeSeekBar = findViewById(R.id.seekbar_set);
+        mRestSeekBar = findViewById(R.id.seekbar_rest);
+        mStartTimerButton = findViewById(R.id.button_start);
+        mSetPicker = findViewById(R.id.set_picker);
+        mSwitch = findViewById(R.id.switch_bluetooth);
+        mLabelExercise = findViewById(R.id.label_exercise);
+        mLabelRest = findViewById(R.id.label_rest);
+        mLabelSets = findViewById(R.id.label_sets);
+        mExerciseTextView = findViewById(R.id.tv_exercise_time);
+        mRestTime = findViewById(R.id.tv_rest_time);
+
+        // Sets up Seekbars and Pickers
 
         mExerciseTimeSeekBar.setMax(180);
         mExerciseTimeSeekBar.setProgress(60);
@@ -53,6 +73,24 @@ public class MainActivity extends AppCompatActivity {
         mRestSeekBar.setMax(90);
         mRestSeekBar.setProgress(30);
         mRestTime.setText("0:30\u00A0");
+        mSetPicker.setDisplayedValues(getResources().getStringArray(R.array.sets));
+        mSetPicker.setMinValue(1);
+        mSetPicker.setMaxValue(getResources().getStringArray(R.array.sets).length);
+        mSetPicker.setWrapSelectorWheel(false);
+        mSetPicker.setValue(3);
+
+        // Adds click and change listeners
+
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    //TODO: check if Bluetooth is enabled
+
+                }
+            }
+        });
+
         mExerciseTimeSeekBar.setOnSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
             @Override
             public void onProgressChanged(CircularSeekBar circularSeekBar, float v, boolean b) {
@@ -92,11 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mSetPicker.setDisplayedValues(getResources().getStringArray(R.array.sets));
-        mSetPicker.setMinValue(1);
-        mSetPicker.setMaxValue(getResources().getStringArray(R.array.sets).length);
-        mSetPicker.setWrapSelectorWheel(false);
-        mSetPicker.setValue(3);
+
         mStartTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,4 +144,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //TODO: Check bluetooth connection here
+    }
 }
